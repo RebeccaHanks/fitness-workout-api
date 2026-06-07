@@ -7,51 +7,158 @@
   },
   "host": "localhost:3000",
   "basePath": "/",
-  "schemes": [
-    "http"
-  ],
+  "schemes": ["http"],
   "paths": {
-    "/": {
+    "/api/workouts": {
       "get": {
-        "description": "",
+        "summary": "Get all workouts",
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "List of workouts"
           }
         }
       },
       "post": {
-        "description": "",
+        "summary": "Create a new workout",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "workout",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Workout"
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "201": {
+            "description": "Workout created"
+          },
+          "400": {
+            "description": "Invalid workout data"
           }
         }
       }
     },
-    "/{id}": {
+    "/api/workouts/{id}": {
       "get": {
-        "description": "",
+        "summary": "Get workout by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "Workout found"
+          },
+          "404": {
+            "description": "Workout not found"
           }
         }
       },
       "put": {
-        "description": "",
+        "summary": "Update workout by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "workout",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Workout"
+            }
+          }
+        ],
         "responses": {
-          "default": {
-            "description": ""
+          "200": {
+            "description": "Workout updated"
+          },
+          "400": {
+            "description": "Invalid workout data"
+          },
+          "404": {
+            "description": "Workout not found"
           }
         }
       },
       "delete": {
-        "description": "",
-        "responses": {
-          "default": {
-            "description": ""
+        "summary": "Delete workout by ID",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "type": "string"
           }
+        ],
+        "responses": {
+          "200": {
+            "description": "Workout deleted"
+          },
+          "404": {
+            "description": "Workout not found"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Workout": {
+      "type": "object",
+      "required": [
+        "title",
+        "description",
+        "difficulty",
+        "durationMinutes",
+        "exercises",
+        "muscleGroups"
+      ],
+      "properties": {
+        "title": {
+          "type": "string",
+          "example": "Leg Day"
+        },
+        "description": {
+          "type": "string",
+          "example": "Lower body workout"
+        },
+        "difficulty": {
+          "type": "string",
+          "example": "medium"
+        },
+        "durationMinutes": {
+          "type": "number",
+          "example": 45
+        },
+        "exercises": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["Squats", "Lunges"]
+        },
+        "muscleGroups": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["legs", "glutes"]
+        },
+        "equipment": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "example": ["Dumbbells"]
         }
       }
     }
