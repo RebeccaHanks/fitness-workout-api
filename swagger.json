@@ -8,7 +8,77 @@
   "host": "localhost:3000",
   "basePath": "/",
   "schemes": ["http"],
+  "securityDefinitions": {
+  "Bearer": {
+    "type": "apiKey",
+    "name": "Authorization",
+    "in": "header",
+    "description": "Enter: Bearer your-token-here"
+  }
+},
   "paths": {
+    "/api/auth/register": {
+      "post": {
+        "summary": "Register a new user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "user",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/User"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "User registered successfully"
+          },
+          "400": {
+            "description": "User already exists"
+          }
+        }
+      }
+    },
+
+    "/api/auth/login": {
+      "post": {
+        "summary": "Login user",
+        "parameters": [
+          {
+            "in": "body",
+            "name": "credentials",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "required": [
+                "email",
+                "password"
+              ],
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "example": "rebecca@test.com"
+                },
+                "password": {
+                  "type": "string",
+                  "example": "password123"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Login successful"
+          },
+          "401": {
+            "description": "Invalid credentials"
+          }
+        }
+      }
+    },
+
     "/api/workouts": {
       "get": {
         "summary": "Get all workouts",
@@ -20,6 +90,11 @@
       },
       "post": {
         "summary": "Create a new workout",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "in": "body",
@@ -40,6 +115,7 @@
         }
       }
     },
+
     "/api/workouts/{id}": {
       "get": {
         "summary": "Get workout by ID",
@@ -60,8 +136,14 @@
           }
         }
       },
+
       "put": {
         "summary": "Update workout by ID",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -90,8 +172,14 @@
           }
         }
       },
+
       "delete": {
         "summary": "Delete workout by ID",
+        "security": [
+          {
+            "Bearer": []
+          }
+        ],
         "parameters": [
           {
             "name": "id",
@@ -111,7 +199,31 @@
       }
     }
   },
+
   "definitions": {
+    "User": {
+      "type": "object",
+      "required": [
+        "name",
+        "email",
+        "password"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "example": "Rebecca Hanks"
+        },
+        "email": {
+          "type": "string",
+          "example": "rebecca@test.com"
+        },
+        "password": {
+          "type": "string",
+          "example": "password123"
+        }
+      }
+    },
+
     "Workout": {
       "type": "object",
       "required": [
@@ -144,21 +256,29 @@
           "items": {
             "type": "string"
           },
-          "example": ["Squats", "Lunges"]
+          "example": [
+            "Squats",
+            "Lunges"
+          ]
         },
         "muscleGroups": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "example": ["legs", "glutes"]
+          "example": [
+            "legs",
+            "glutes"
+          ]
         },
         "equipment": {
           "type": "array",
           "items": {
             "type": "string"
           },
-          "example": ["Dumbbells"]
+          "example": [
+            "Dumbbells"
+          ]
         }
       }
     }
